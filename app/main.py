@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.api.v1 import projects, resources
+from app.api.v1 import projects, resources, engine
 from app.core.config import settings
 from app.middleware.audit import AuditLogMiddleware
 from app.middleware.rate_limit import RateLimitMiddleware
@@ -13,6 +13,7 @@ app = FastAPI(
 app.add_middleware(RateLimitMiddleware)
 app.add_middleware(AuditLogMiddleware)
 
+app.include_router(engine.router, prefix=settings.API_V1_STR + "/engine", tags=["engine"])
 app.include_router(projects.router, prefix=settings.API_V1_STR + "/projects", tags=["projects"])
 app.include_router(resources.router, prefix=settings.API_V1_STR + "/resource", tags=["resources"])
 
